@@ -26,3 +26,4 @@ yarn-error.log*
 # Notes
 notes.md 
 env
+.env 
