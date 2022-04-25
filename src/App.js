@@ -6,20 +6,29 @@ import Home from "./components/static/Home";
 import NavBar from "./components/static/NavBar";
 import { GameCard } from "./components/game/GameCard";
 import { About } from "./components/static/About";
-// import { API_KEY } from "./Globals";
 import { apiUrl } from "./Globals";
+import { useDispatch, useSelector } from "react-redux";
+import { loadArticle } from "./actions/articleAction";
 
 function App() {
-  const [articles, setArticles] = useState([]);
-  // const apiUrl = `https://newsapi.org/v2/top-headlines?sources=bbc-news,fox-news,reuters,associated-press,cnn&apiKey=${API_KEY}`;
+  // const [articles, setArticles] = useState([]);
+  const dispatch = useDispatch();
+  const article = useSelector((state) => state.articles);
+  const requesting = useSelector((state) => state.requesting);
 
+  // use redux to fetch the articles from apiurl
   useEffect(() => {
-    fetch(apiUrl)
-      .then((response) => response.json())
-      .then((data) => setArticles(data.articles))
-      .catch((error) => console.log(error));
+    dispatch(loadArticle());
   }, []);
-  console.log(articles.articles);
+  // console.log("articles", articles);
+
+  // useEffect(() => {
+  //   fetch(apiUrl)
+  //     .then((response) => response.json())
+  //     .then((data) => setArticles(data.articles))
+  //     .catch((error) => console.log(error));
+  // }, []);
+  // console.log(articles.articles);
 
   return (
     <div className="App">
