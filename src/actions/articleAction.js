@@ -6,7 +6,6 @@ export const loadArticle = () => {
     dispatch({ type: "REQUESTING" });
     const resp = await fetch(apiUrl);
     const data = await resp.json();
-    // console.log("data", data.articles);
     dispatch({ type: "GET_ARTICLES", payload: data.articles });
     dispatch({ type: "COMPLETED_REQUESTING" });
   };
