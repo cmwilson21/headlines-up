@@ -37,6 +37,7 @@ export const GameCard = () => {
           <p className="card-text">{randomArticle.body}</p> */}
             <h5 className="card-title">{articles.title}</h5>
             <p className="card-text">{articles.description}</p>
+            <p>{articles.content}</p>
           </div>
         </div>
       </div>
