@@ -7,12 +7,7 @@ export const GameCard = () => {
   const articles = useSelector(
     (state) => state.article[Math.floor(Math.random() * state.article.length)]
   );
-  // const [apNews, setAPNews] = useState(false);
-  // const [bbcNews, setBBCNews] = useState(false);
-  // const [cnnNews, setCNNNews] = useState(false);
-  // const [foxNews, setFoxNews] = useState(false);
-  // const [reutersNews, setReutersNews] = useState(false);
-  const [selection, setSelection] = useState("ap-news");
+  const [selection, setSelection] = useState("");
 
   const handleAPChange = () => {
     setSelection("ap-news");
@@ -81,6 +76,8 @@ export const GameCard = () => {
               value={selection === "reuters-news"}
               onChange={handleReutersChange}
             />
+            <br />
+            <input type="submit" value="Submit" />
           </div>
         </div>
       </div>
