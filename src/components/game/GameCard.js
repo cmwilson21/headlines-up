@@ -36,7 +36,7 @@ export const GameCard = () => {
             {/* <h5 className="card-title">{randomArticle.title}</h5>
           <p className="card-text">{randomArticle.body}</p> */}
             <h5 className="card-title">{articles.title}</h5>
-            <p className="card-text">{articles.body}</p>
+            <p className="card-text">{articles.description}</p>
           </div>
         </div>
       </div>
