@@ -7,16 +7,37 @@ export const GameCard = () => {
   const articles = useSelector(
     (state) => state.article[Math.floor(Math.random() * state.article.length)]
   );
-  const [value, setValue] = useState(false);
+  // const [apNews, setAPNews] = useState(false);
+  // const [bbcNews, setBBCNews] = useState(false);
+  // const [cnnNews, setCNNNews] = useState(false);
+  // const [foxNews, setFoxNews] = useState(false);
+  // const [reutersNews, setReutersNews] = useState(false);
+  const [selection, setSelection] = useState("ap-news");
+
+  const handleAPChange = () => {
+    setSelection("ap-news");
+  };
+
+  const handleBBCChange = () => {
+    setSelection("bbc-news");
+  };
+
+  const handleCNNChange = () => {
+    setSelection("cnn-news");
+  };
+
+  const handleFoxChange = () => {
+    setSelection("fox-news");
+  };
+
+  const handleReutersChange = () => {
+    setSelection("reuters-news");
+  };
 
   useEffect(() => {
     dispatch(loadArticle());
   }, [dispatch]);
   console.log("articles", articles);
-
-  const handleChange = () => {
-    setValue(!value);
-  };
 
   const RadioButton = ({ label, value, onChange }) => {
     return (
@@ -37,28 +58,28 @@ export const GameCard = () => {
             <p>{articles.content}</p>
             <RadioButton
               label="AP News"
-              value={value}
-              onChange={handleChange}
+              value={selection === "ap-news"}
+              onChange={handleAPChange}
             />
             <RadioButton
               label="BBC News"
-              value={value}
-              onChange={handleChange}
+              value={selection === "bbc-news"}
+              onChange={handleBBCChange}
             />
             <RadioButton
               label="CNN News"
-              value={value}
-              onChange={handleChange}
+              value={selection === "cnn-news"}
+              onChange={handleCNNChange}
             />
             <RadioButton
               label="Fox News"
-              value={value}
-              onChange={handleChange}
+              value={selection === "fox-news"}
+              onChange={handleFoxChange}
             />
             <RadioButton
               label="Reuters"
-              value={value}
-              onChange={handleChange}
+              value={selection === "reuters-news"}
+              onChange={handleReutersChange}
             />
           </div>
         </div>
