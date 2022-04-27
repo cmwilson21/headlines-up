@@ -32,7 +32,7 @@ export const GameCard = () => {
   useEffect(() => {
     dispatch(loadArticle());
   }, [dispatch]);
-  console.log("articles", articles);
+  // console.log("articles", articles);
 
   const RadioButton = ({ label, value, onChange }) => {
     return (
@@ -55,26 +55,31 @@ export const GameCard = () => {
               label="AP News"
               value={selection === "ap-news"}
               onChange={handleAPChange}
+              radioId="associated-press"
             />
             <RadioButton
               label="BBC News"
               value={selection === "bbc-news"}
               onChange={handleBBCChange}
+              radioId="bbc-news"
             />
             <RadioButton
               label="CNN News"
               value={selection === "cnn-news"}
               onChange={handleCNNChange}
+              radioId="cnn"
             />
             <RadioButton
               label="Fox News"
               value={selection === "fox-news"}
               onChange={handleFoxChange}
+              radioId="fox-news"
             />
             <RadioButton
               label="Reuters"
               value={selection === "reuters-news"}
               onChange={handleReutersChange}
+              radioId="reuters"
             />
             <br />
             <input type="submit" value="Submit" />
