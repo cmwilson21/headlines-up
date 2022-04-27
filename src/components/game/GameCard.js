@@ -43,6 +43,11 @@ export const GameCard = () => {
     );
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log("selection", selection);
+  };
+
   if (articles) {
     return (
       <div>
@@ -82,7 +87,9 @@ export const GameCard = () => {
               radioId="reuters"
             />
             <br />
-            <input type="submit" value="Submit" />
+            <button type="submit" onClick={handleSubmit}>
+              Submit
+            </button>
           </div>
         </div>
       </div>
