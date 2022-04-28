@@ -57,11 +57,11 @@ export const GameCard = () => {
     console.log("selection", selection);
     console.log("submit arti", articles);
     console.log("source", articles.source.id);
-    // if (selection === articles.artlcles.source.id) {
-    //   return "Correct";
-    // } else {
-    //   return "Wrong";
-    // }
+    if (selection === articles.source.id) {
+      return alert("Correct");
+    } else {
+      return alert("Wrong");
+    }
   };
 
   if (articles) {
