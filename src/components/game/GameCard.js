@@ -10,7 +10,7 @@ export const GameCard = () => {
   const [selection, setSelection] = useState("");
 
   const handleAPChange = () => {
-    setSelection("ap-news");
+    setSelection("associated-press");
   };
 
   const handleBBCChange = () => {
@@ -18,7 +18,7 @@ export const GameCard = () => {
   };
 
   const handleCNNChange = () => {
-    setSelection("cnn-news");
+    setSelection("cnn");
   };
 
   const handleFoxChange = () => {
@@ -26,7 +26,7 @@ export const GameCard = () => {
   };
 
   const handleReutersChange = () => {
-    setSelection("reuters-news");
+    setSelection("reuters");
   };
 
   useEffect(() => {
@@ -35,9 +35,18 @@ export const GameCard = () => {
   // console.log("articles", articles);
 
   const RadioButton = ({ label, value, onChange }) => {
+    // const handleClick = (e) => {
+    //   e.preventDefault();
+    //   onChange(value);
+    // };
     return (
       <label>
-        <input type="radio" checked={value} onChange={onChange} />
+        <input
+          type="radio"
+          checked={value}
+          onChange={onChange}
+          // onClick={handleClick}
+        />
         {label}
       </label>
     );
@@ -46,6 +55,13 @@ export const GameCard = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("selection", selection);
+    console.log("submit arti", articles);
+    console.log("source", articles.source.id);
+    // if (selection === articles.artlcles.source.id) {
+    //   return "Correct";
+    // } else {
+    //   return "Wrong";
+    // }
   };
 
   if (articles) {
@@ -58,33 +74,38 @@ export const GameCard = () => {
             <p>{articles.content}</p>
             <RadioButton
               label="AP News"
-              value={selection === "ap-news"}
+              value={selection === "associated-press"}
               onChange={handleAPChange}
-              radioId="associated-press"
+              // onClick={handleClick}
+              // radioId="associated-press"
             />
             <RadioButton
               label="BBC News"
               value={selection === "bbc-news"}
               onChange={handleBBCChange}
-              radioId="bbc-news"
+              // onClick={handleClick}
+              // radioId="bbc-news"
             />
             <RadioButton
               label="CNN News"
-              value={selection === "cnn-news"}
+              value={selection === "cnn"}
               onChange={handleCNNChange}
-              radioId="cnn"
+              // onClick={handleClick}
+              // radioId="cnn"
             />
             <RadioButton
               label="Fox News"
               value={selection === "fox-news"}
               onChange={handleFoxChange}
-              radioId="fox-news"
+              // onClick={handleClick}
+              // radioId="fox-news"
             />
             <RadioButton
               label="Reuters"
-              value={selection === "reuters-news"}
+              value={selection === "reuters"}
               onChange={handleReutersChange}
-              radioId="reuters"
+              // onClick={handleClick}
+              // radioId="reuters"
             />
             <br />
             <button type="submit" onClick={handleSubmit}>
