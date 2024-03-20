@@ -4,10 +4,11 @@ import { loadArticle } from "../../actions/articleAction";
 
 export const GameCard = () => {
   const dispatch = useDispatch();
-  const articles = useSelector(
-    (state) => state.article[Math.floor(Math.random() * state.article.length)]
-  );
+  const articles = useSelector((state) => state.article);
+  // This gets us the whole list of articles ^^
   const [selection, setSelection] = useState("");
+  const [articleNumber, setArticleNumber] = useState(0);
+  const article = articles[articleNumber];
 
   const handleAPChange = () => {
     setSelection("ap-news");
@@ -28,11 +29,16 @@ export const GameCard = () => {
   const handleReutersChange = () => {
     setSelection("reuters-news");
   };
+  const changeHandler = (source) => {
+    return () => {
+      setSelection(source);
+    };
+  };
 
   useEffect(() => {
     dispatch(loadArticle());
   }, [dispatch]);
-  console.log("articles", articles);
+  console.log("article", article);
 
   const RadioButton = ({ label, value, onChange }) => {
     return (
@@ -43,18 +49,18 @@ export const GameCard = () => {
     );
   };
 
-  if (articles) {
+  if (article) {
     return (
       <div>
         <div className="card">
           <div className="card-body">
-            <h5 className="card-title">{articles.title}</h5>
-            <p className="card-text">{articles.description}</p>
-            <p>{articles.content}</p>
+            <h5 className="card-title">{article.title}</h5>
+            <p className="card-text">{article.description}</p>
+            <p>{article.content}</p>
             <RadioButton
               label="AP News"
               value={selection === "ap-news"}
-              onChange={handleAPChange}
+              onChange={changeHandler("ap-news")}
             />
             <RadioButton
               label="BBC News"

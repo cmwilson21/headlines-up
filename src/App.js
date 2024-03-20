@@ -1,6 +1,6 @@
 import logo from "./logo.svg";
 import "./App.css";
-import { React, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Routes, BrowserRouter as Router, Route } from "react-router-dom";
 import Home from "./components/static/Home";
 import NavBar from "./components/static/NavBar";
@@ -20,14 +20,14 @@ function App() {
   // }, []);
   // console.log("articles", article);
 
+  //      {/* <Route path="/signup" element={<Home />} /> */}
+  //      {/* <Route path="/login" element={<Home />} /> */}
   return (
     <div className="App">
       <Router>
         <NavBar />
         <Routes>
           <Route path="/" element={<Home />} />
-          {/* <Route path="/signup" element={<Home />} /> */}
-          {/* <Route path="/login" element={<Home />} /> */}
           <Route path="/play" element={<GameCard />} />
           <Route path="/about" element={<About />} />
         </Routes>
