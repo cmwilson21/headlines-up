@@ -65,22 +65,22 @@ export const GameCard = () => {
             <RadioButton
               label="BBC News"
               value={selection === "bbc-news"}
-              onChange={handleBBCChange}
+              onChange={changeHandler("bbc-news")}
             />
             <RadioButton
               label="CNN News"
               value={selection === "cnn-news"}
-              onChange={handleCNNChange}
+              onChange={changeHandler("cnn-news")}
             />
             <RadioButton
               label="Fox News"
               value={selection === "fox-news"}
-              onChange={handleFoxChange}
+              onChange={changeHandler("fox-news")}
             />
             <RadioButton
               label="Reuters"
               value={selection === "reuters-news"}
-              onChange={handleReutersChange}
+              onChange={changeHandler("reuters-news")}
             />
             <br />
             <input type="submit" value="Submit" />
