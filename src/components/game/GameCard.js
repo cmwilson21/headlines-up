@@ -10,29 +10,15 @@ export const GameCard = () => {
   const [articleNumber, setArticleNumber] = useState(0);
   const article = articles[articleNumber];
 
-  const handleAPChange = () => {
-    setSelection("ap-news");
-  };
-
-  const handleBBCChange = () => {
-    setSelection("bbc-news");
-  };
-
-  const handleCNNChange = () => {
-    setSelection("cnn-news");
-  };
-
-  const handleFoxChange = () => {
-    setSelection("fox-news");
-  };
-
-  const handleReutersChange = () => {
-    setSelection("reuters-news");
-  };
   const changeHandler = (source) => {
     return () => {
       setSelection(source);
     };
+  };
+
+  const submitHandler = (e) => {
+    e.preventDefault();
+    console.log("submitting", selection);
   };
 
   useEffect(() => {
@@ -83,7 +69,7 @@ export const GameCard = () => {
               onChange={changeHandler("reuters-news")}
             />
             <br />
-            <input type="submit" value="Submit" />
+            <button onClick={submitHandler}>Submit</button>
           </div>
         </div>
       </div>
