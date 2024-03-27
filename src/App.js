@@ -6,6 +6,8 @@ import Home from "./components/static/Home";
 import NavBar from "./components/static/NavBar";
 import { GameCard } from "./components/game/GameCard";
 import { About } from "./components/static/About";
+import Signup from "./components/sessions/Signup";
+import Login from "./components/sessions/Login";
 // import { apiUrl } from "./Globals";
 // import { useDispatch, useSelector } from "react-redux";
 // import { loadArticle } from "./actions/articleAction";
