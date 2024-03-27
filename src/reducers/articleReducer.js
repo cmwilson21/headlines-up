@@ -4,6 +4,7 @@ const articleReducer = (state = initialState, action) => {
   switch (action.type) {
     case "GET_ARTICLES":
       if (action.payload) {
+        // console.log("payload", action.payload);
         let withRandom = action.payload.map((article) => {
           return {
             article,
