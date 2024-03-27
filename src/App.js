@@ -22,14 +22,14 @@ function App() {
   // }, []);
   // console.log("articles", article);
 
+  //      {/* <Route path="/signup" element={<Home />} /> */}
+  //      {/* <Route path="/login" element={<Home />} /> */}
   return (
     <div className="App">
       <Router>
         <NavBar />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/login" element={<Login />} />
           <Route path="/play" element={<GameCard />} />
           <Route path="/about" element={<About />} />
         </Routes>
