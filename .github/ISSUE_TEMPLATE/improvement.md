@@ -2,7 +2,7 @@
 name: Improvement
 about: Add your ideas for improvement.
 title: 'Improvement - '
-labels: ''
+labels: 'improvement'
 assignees: ''
 
 ---
