@@ -64,10 +64,10 @@ const CardBody = ({ article, nextButton }) => {
   return (
     <div className="card-body">
       <h3 className="card-title">
-        {article.title.replace(/AP|BBC|CNN|Reuters|Fox News/g, "")}
+        {article.title.replace(/\bAP\b|BBC|CNN|Reuters|Fox News/g, "")}
       </h3>
       <p className="card-text">
-        {article.description.replace(/AP|BBC|CNN|Reuters|Fox News/g, "")}
+        {article.description.replace(/\bAP\b|BBC|CNN|Reuters|Fox News/g, "")}
       </p>
       <RadioButton
         label="AP News"
