@@ -64,10 +64,16 @@ const CardBody = ({ article, nextButton }) => {
   return (
     <div className="card-body">
       <h3 className="card-title">
-        {article.title.replace(/\bAP\b|BBC|CNN|Reuters|Fox News/g, "")}
+        {article.title.replace(
+          /\bAP\b|BBC|CNN|Reuters|Fox News/g,
+          "(news source)"
+        )}
       </h3>
       <p className="card-text">
-        {article.description.replace(/\bAP\b|BBC|CNN|Reuters|Fox News/g, "")}
+        {article.description.replace(
+          /\bAP\b|BBC|CNN|Reuters|Fox News/g,
+          "(news source)"
+        )}
       </p>
       <RadioButton
         label="AP News"
@@ -95,7 +101,9 @@ const CardBody = ({ article, nextButton }) => {
         onChange={changeHandler("reuters")}
       />
       <br />
-      <button onClick={submitHandler}>Submit</button>
+      <div className="submit-button">
+        <button onClick={submitHandler}>Submit</button>
+      </div>
       <button onClick={nextButton}>Next</button>
       {isGuessCorrect === "correct" ? (
         <CongratsCard article={article} />

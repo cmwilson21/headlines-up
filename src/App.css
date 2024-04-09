@@ -60,3 +60,7 @@
   display: inline-block;
   padding: 0.5em 1em;
 }
+
+.submit-button {
+  padding: 1em;
+}
