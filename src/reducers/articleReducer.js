@@ -4,7 +4,7 @@ const articleReducer = (state = initialState, action) => {
   switch (action.type) {
     case "GET_ARTICLES":
       if (action.payload) {
-        // console.log("payload", action.payload);
+        console.log("payload", action.payload);
         let withRandom = action.payload.map((article) => {
           return {
             article,
@@ -14,7 +14,7 @@ const articleReducer = (state = initialState, action) => {
         withRandom.sort((a, b) => {
           return b.weight - a.weight;
         });
-        return withRandom.map((item) => item.article);
+        return state.concat(withRandom.map((item) => item.article));
       } else {
         return state;
       }

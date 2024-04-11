@@ -122,7 +122,9 @@ export const GameCard = () => {
   // This gets us the whole list of articles ^^
   const [articleNumber, setArticleNumber] = useState(0);
   const article = articles[articleNumber];
-
+  if (articleNumber === articles.length - 1) {
+    dispatch(loadArticle());
+  }
   useEffect(() => {
     dispatch(loadArticle());
   }, [dispatch]);
@@ -131,6 +133,17 @@ export const GameCard = () => {
   const nextButton = () => {
     setArticleNumber(articleNumber + 1);
   };
+
+  // const nextButton = () => {
+  //   if (articleNumber === 19) {
+  //     dispatch(loadArticle());
+  //     setArticleNumber(0);
+  //   } else {
+  //     setArticleNumber(articleNumber + 1);
+  //   }
+  // };
+
+  // if article number reaches 19, load more articles
 
   if (article) {
     return (
