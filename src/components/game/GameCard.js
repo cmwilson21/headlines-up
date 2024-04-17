@@ -40,6 +40,14 @@ const RadioButton = ({ label, value, onChange }) => {
 const CardBody = ({ article, nextButton }) => {
   const [selection, setSelection] = useState("");
   const [isGuessCorrect, setIsGuessCorrect] = useState("");
+  const [score, setScore] = useState(() => {
+    const savedScore = localStorage.getItem("score");
+    return savedScore ? JSON.parse(savedScore) : 0;
+  });
+
+  useEffect(() => {
+    localStorage.setItem("score", JSON.stringify(score));
+  }, [score]);
 
   const changeHandler = (source) => {
     return () => {
@@ -54,12 +62,12 @@ const CardBody = ({ article, nextButton }) => {
     if (selection === article.source.id) {
       console.log("correct");
       setIsGuessCorrect("correct");
-      // return congratsCard();
+      setScore(score + 1);
+      console.log("Score", score);
     } else {
       setIsGuessCorrect("incorrect");
       console.log("incorrect");
     }
-    // setIsSubmitted(true);
   };
   return (
     <div className="card-body">
@@ -101,6 +109,7 @@ const CardBody = ({ article, nextButton }) => {
         onChange={changeHandler("reuters")}
       />
       <br />
+      <p>Score: {score}</p>
       <div className="submit-button">
         <button onClick={submitHandler}>Submit</button>
       </div>
@@ -122,9 +131,11 @@ export const GameCard = () => {
   // This gets us the whole list of articles ^^
   const [articleNumber, setArticleNumber] = useState(0);
   const article = articles[articleNumber];
+
   if (articleNumber === articles.length - 1) {
     dispatch(loadArticle());
   }
+
   useEffect(() => {
     dispatch(loadArticle());
   }, [dispatch]);
@@ -133,17 +144,6 @@ export const GameCard = () => {
   const nextButton = () => {
     setArticleNumber(articleNumber + 1);
   };
-
-  // const nextButton = () => {
-  //   if (articleNumber === 19) {
-  //     dispatch(loadArticle());
-  //     setArticleNumber(0);
-  //   } else {
-  //     setArticleNumber(articleNumber + 1);
-  //   }
-  // };
-
-  // if article number reaches 19, load more articles
 
   if (article) {
     return (
