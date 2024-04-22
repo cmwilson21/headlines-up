@@ -114,13 +114,9 @@ const CardBody = ({ article, nextButton }) => {
         <button onClick={submitHandler}>Submit</button>
       </div>
       <button onClick={nextButton}>Next</button>
-      {isGuessCorrect === "correct" ? (
-        <CongratsCard article={article} />
-      ) : isGuessCorrect === "incorrect" ? (
-        <p>Incorrect, guess again</p>
-      ) : (
-        <p> Guess now! </p>
-      )}
+
+      {isGuessCorrect === "correct" && <CongratsCard article={article} />}
+      {isGuessCorrect === "incorrect" && <p>Incorrect, guess again!</p>}
     </div>
   );
 };
