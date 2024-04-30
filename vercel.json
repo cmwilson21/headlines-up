@@ -1,8 +1,8 @@
 {
   "redirects": [
     {
-      "source": "/proxy",
-      "destination": "https://newsapi.org"
+      "source": "/proxy/:path*",
+      "destination": "https://newsapi.org/:path*"
     }
   ]
 }
