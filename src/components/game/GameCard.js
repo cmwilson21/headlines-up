@@ -32,10 +32,7 @@ const CongratsCard = ({ article }) => {
 const CardBody = ({ article, nextButton }) => {
   const [selection, setSelection] = useState("");
   const [isGuessCorrect, setIsGuessCorrect] = useState("");
-  const [score, setScore] = useState(() => {
-    const savedScore = localStorage.getItem("score");
-    return savedScore ? JSON.parse(savedScore) : 0;
-  });
+  const [score, setScore] = useState(() => JSON.parse(localStorage.getItem("score")) || 0);
 
   useEffect(() => {
     localStorage.setItem("score", JSON.stringify(score));
