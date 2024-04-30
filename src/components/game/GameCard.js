@@ -11,6 +11,7 @@ const CongratsCard = ({ article }) => {
           <p className="congrats-card-text">You answered correctly!</p>
           <img
             src={article.urlToImage}
+            alt=""
             component="img"
             height="250"
             width="auto"
@@ -19,7 +20,7 @@ const CongratsCard = ({ article }) => {
           <p>{article.description}</p>
           <p>
             {article.content}...{" "}
-            <a href={article.url} target="_blank">
+            <a href={article.url} target="_blank" rel="noreferrer">
               view full article.
             </a>
           </p>
@@ -32,7 +33,9 @@ const CongratsCard = ({ article }) => {
 const CardBody = ({ article, nextButton }) => {
   const [selection, setSelection] = useState("");
   const [isGuessCorrect, setIsGuessCorrect] = useState("");
-  const [score, setScore] = useState(() => JSON.parse(localStorage.getItem("score")) || 0);
+  const [score, setScore] = useState(
+    () => JSON.parse(localStorage.getItem("score")) || 0
+  );
 
   useEffect(() => {
     localStorage.setItem("score", JSON.stringify(score));
@@ -122,7 +125,7 @@ const CardBody = ({ article, nextButton }) => {
       <button onClick={nextButton}>Next</button>
 
       {isGuessCorrect && <CongratsCard article={article} />}
-      {isGuessCorrect && <p>Incorrect, guess again!</p>}
+      {!isGuessCorrect && <p>Incorrect, guess again!</p>}
     </div>
   );
 };
