@@ -85,6 +85,7 @@ const CardBody = ({ article, nextButton }) => {
 
   // the radio button list component maps over the radioOptions array and creates a radio button for each option
   const RadioButtonsList = ({ options, selection, changeHandler }) => {
+    console.log("options", options);
     return options.map((option) => (
       <RadioButton
         key={option.value}
