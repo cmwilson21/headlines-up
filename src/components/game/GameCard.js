@@ -28,20 +28,18 @@ const CongratsCard = ({ article }) => {
     </div>
   );
 };
-const RadioButton = ({ label, value, onChange }) => {
-  return (
-    <label>
-      <input type="radio" checked={value} onChange={onChange} />
-      {label}
-    </label>
-  );
-};
 
 const CardBody = ({ article, nextButton }) => {
   const [selection, setSelection] = useState("");
   const [isGuessCorrect, setIsGuessCorrect] = useState("");
+  const [score, setScore] = useState(() => JSON.parse(localStorage.getItem("score")) || 0);
+
+  useEffect(() => {
+    localStorage.setItem("score", JSON.stringify(score));
+  }, [score]);
 
   const changeHandler = (source) => {
+    console.log("source2", source);
     return () => {
       setSelection(source);
     };
@@ -51,16 +49,50 @@ const CardBody = ({ article, nextButton }) => {
     e.preventDefault();
     console.log("submitting", selection);
     console.log("source id", article.source.id);
-    if (selection === article.source.id) {
+    const isCorrect = selection === article.source.id;
+    setIsGuessCorrect(isCorrect);
+    if (isCorrect) {
       console.log("correct");
       setIsGuessCorrect("correct");
-      // return congratsCard();
+      setScore(score + 1);
+      console.log("Score", score);
     } else {
-      setIsGuessCorrect("incorrect");
       console.log("incorrect");
     }
-    // setIsSubmitted(true);
   };
+
+  // set radioOptions to an array of objects
+  const radioOptions = [
+    { label: "AP News", value: "associated-press" },
+    { label: "BBC News", value: "bbc-news" },
+    { label: "CNN News", value: "cnn" },
+    { label: "Fox News", value: "fox-news" },
+    { label: "Reuters", value: "reuters" },
+  ];
+
+  // the radio button component defines what we are looking for in the radio button - the label is the text that will be displayed, the value is the value that will be passed to the changeHandler, and the onChange is the function that will be called when the radio button is clicked
+  const RadioButton = ({ label, value, onChange }) => {
+    return (
+      <label>
+        <input type="radio" checked={value} onChange={onChange} />
+        {label}
+      </label>
+    );
+  };
+
+  // the radio button list component maps over the radioOptions array and creates a radio button for each option
+  const RadioButtonsList = ({ options, selection, changeHandler }) => {
+    console.log("options", options);
+    return options.map((option) => (
+      <RadioButton
+        key={option.value}
+        label={option.label}
+        value={selection === option.value}
+        onChange={changeHandler(option.value)}
+      />
+    ));
+  };
+
   return (
     <div className="card-body">
       <h3 className="card-title">
@@ -75,43 +107,22 @@ const CardBody = ({ article, nextButton }) => {
           "(news source)"
         )}
       </p>
-      <RadioButton
-        label="AP News"
-        value={selection === "associated-press"}
-        onChange={changeHandler("associated-press")}
-      />
-      <RadioButton
-        label="BBC News"
-        value={selection === "bbc-news"}
-        onChange={changeHandler("bbc-news")}
-      />
-      <RadioButton
-        label="CNN News"
-        value={selection === "cnn"}
-        onChange={changeHandler("cnn")}
-      />
-      <RadioButton
-        label="Fox News"
-        value={selection === "fox-news"}
-        onChange={changeHandler("fox-news")}
-      />
-      <RadioButton
-        label="Reuters"
-        value={selection === "reuters"}
-        onChange={changeHandler("reuters")}
-      />
+      <div className="radio-buttons">
+        <RadioButtonsList
+          options={radioOptions}
+          selection={selection}
+          changeHandler={changeHandler}
+        />
+      </div>
       <br />
+      <p>Score: {score}</p>
       <div className="submit-button">
         <button onClick={submitHandler}>Submit</button>
       </div>
       <button onClick={nextButton}>Next</button>
-      {isGuessCorrect === "correct" ? (
-        <CongratsCard article={article} />
-      ) : isGuessCorrect === "incorrect" ? (
-        <p>Incorrect, guess again</p>
-      ) : (
-        <p> Guess now! </p>
-      )}
+
+      {isGuessCorrect && <CongratsCard article={article} />}
+      {isGuessCorrect && <p>Incorrect, guess again!</p>}
     </div>
   );
 };
@@ -122,9 +133,11 @@ export const GameCard = () => {
   // This gets us the whole list of articles ^^
   const [articleNumber, setArticleNumber] = useState(0);
   const article = articles[articleNumber];
+
   if (articleNumber === articles.length - 1) {
     dispatch(loadArticle());
   }
+
   useEffect(() => {
     dispatch(loadArticle());
   }, [dispatch]);
@@ -133,17 +146,6 @@ export const GameCard = () => {
   const nextButton = () => {
     setArticleNumber(articleNumber + 1);
   };
-
-  // const nextButton = () => {
-  //   if (articleNumber === 19) {
-  //     dispatch(loadArticle());
-  //     setArticleNumber(0);
-  //   } else {
-  //     setArticleNumber(articleNumber + 1);
-  //   }
-  // };
-
-  // if article number reaches 19, load more articles
 
   if (article) {
     return (
