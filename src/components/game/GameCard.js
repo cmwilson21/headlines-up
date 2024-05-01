@@ -36,6 +36,7 @@ const CardBody = ({ article, nextButton }) => {
   const [score, setScore] = useState(
     () => JSON.parse(localStorage.getItem("score")) || 0
   );
+  const [hasGuessed, setHasGuessed] = useState(false);
 
   useEffect(() => {
     localStorage.setItem("score", JSON.stringify(score));
@@ -53,10 +54,10 @@ const CardBody = ({ article, nextButton }) => {
     console.log("submitting", selection);
     console.log("source id", article.source.id);
     const isCorrect = selection === article.source.id;
+    setHasGuessed(true);
     setIsGuessCorrect(isCorrect);
     if (isCorrect) {
       console.log("correct");
-      setIsGuessCorrect("correct");
       setScore(score + 1);
       console.log("Score", score);
     } else {
@@ -124,8 +125,8 @@ const CardBody = ({ article, nextButton }) => {
       </div>
       <button onClick={nextButton}>Next</button>
 
-      {isGuessCorrect && <CongratsCard article={article} />}
-      {!isGuessCorrect && <p>Incorrect, guess again!</p>}
+      {hasGuessed && isGuessCorrect && <CongratsCard article={article} />}
+      {hasGuessed && !isGuessCorrect && <p>Incorrect, guess again!</p>}
     </div>
   );
 };
