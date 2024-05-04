@@ -1,5 +1,7 @@
 import React from "react";
 
+// The congrats card is displayed when the user answers correctly.
+
 const CongratsCard = ({ article }) => {
   return (
     <div>

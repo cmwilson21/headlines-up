@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Routes, BrowserRouter as Router, Route } from "react-router-dom";
 import Home from "./components/static/Home";
 import NavBar from "./components/static/NavBar";
-import { GameCard } from "./components/game/GameCard";
+import { GamePageBody } from "./components/game/GamePageBody";
 import { About } from "./components/static/About";
 import Signup from "./components/sessions/Signup";
 import Login from "./components/sessions/Login";
@@ -30,7 +30,7 @@ function App() {
         <NavBar />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/play" element={<GameCard />} />
+          <Route path="/play" element={<GamePageBody />} />
           <Route path="/about" element={<About />} />
         </Routes>
       </Router>

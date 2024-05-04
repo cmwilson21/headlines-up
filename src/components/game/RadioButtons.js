@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
+
+// The radio buttons component is responsible for rendering the radio buttons.
 
 const RadioButtons = ({ changeHandler, selection }) => {
   // const [selection, setSelection] = useState("");
