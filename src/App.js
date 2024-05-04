@@ -1,6 +1,6 @@
 import logo from "./logo.svg";
 import "./App.css";
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Routes, BrowserRouter as Router, Route } from "react-router-dom";
 import Home from "./components/static/Home";
 import NavBar from "./components/static/NavBar";
