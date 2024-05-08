@@ -15,7 +15,6 @@ app.post("/login", bodyParser.json(), (req, res) => {
   } else {
     res.send(401);
   }
-  // console.log(req.body.username);
 });
 
 app.put("/signup", bodyParser.json(), (req, res) => {

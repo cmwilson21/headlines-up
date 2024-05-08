@@ -19,7 +19,7 @@ const Signup = () => {
           </label>
           <br />
           <label>
-            Email:
+            Username:
             <input type="text" name="email" />
           </label>
           <br />

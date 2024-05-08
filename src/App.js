@@ -8,22 +8,8 @@ import { GamePageBody } from "./components/game/GamePageBody";
 import { About } from "./components/static/About";
 import Signup from "./components/sessions/Signup";
 import Login from "./components/sessions/Login";
-// import { apiUrl } from "./Globals";
-// import { useDispatch, useSelector } from "react-redux";
-// import { loadArticle } from "./actions/articleAction";
 
 function App() {
-  // const dispatch = useDispatch();
-  // const article = useSelector((state) => state.articles);
-  // const requesting = useSelector((state) => state.requesting);
-
-  // useEffect(() => {
-  //   dispatch(loadArticle());
-  // }, []);
-  // console.log("articles", article);
-
-  //      {/* <Route path="/signup" element={<Home />} /> */}
-  //      {/* <Route path="/login" element={<Home />} /> */}
   return (
     <div className="App">
       <Router>
@@ -32,6 +18,8 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/play" element={<GamePageBody />} />
           <Route path="/about" element={<About />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
         </Routes>
       </Router>
     </div>
