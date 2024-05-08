@@ -1,5 +1,7 @@
 const express = require("express");
 const proxy = require("express-http-proxy");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 const bodyParser = require("body-parser");
 const app = express();
 const port = 3010;
