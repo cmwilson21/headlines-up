@@ -25,7 +25,7 @@
     "server": "node server/index.js",
     "start": "react-scripts --openssl-legacy-provider start",
     "build": "react-scripts --openssl-legacy-provider build",
-    "test": "react-scripts --openssl-legacy-provider test",
+    "test": "jest",
     "eject": "react-scripts --openssl-legacy-provider eject"
   },
   "eslintConfig": {
@@ -47,6 +47,7 @@
     ]
   },
   "devDependencies": {
+    "@babel/preset-react": "^7.24.1",
     "@testing-library/react": "^15.0.7",
     "jest": "^27.5.1",
     "jest-fetch-mock": "^3.0.3"
