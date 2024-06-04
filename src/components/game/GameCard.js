@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import CongratsCard from "./CongratsCard.js";
 import RadioButtons from "./RadioButtons.js";
+import IncorrectCard from "./IncorrectCard.js";
 
 // The game card presents the game.
 
@@ -27,6 +28,9 @@ const GameCard = ({ article, nextButton }) => {
     e.preventDefault();
     console.log("submitting", selection);
     console.log("source id", article.source.id);
+    if (hasGuessed) {
+      return;
+    }
     const isCorrect = selection === article.source.id;
     setHasGuessed(true);
     setIsGuessCorrect(isCorrect);
@@ -53,16 +57,23 @@ const GameCard = ({ article, nextButton }) => {
           "(news source)"
         )}
       </p>
-      <RadioButtons changeHandler={changeHandler} selection={selection} />
+      <RadioButtons
+        changeHandler={changeHandler}
+        disabled={hasGuessed}
+        selection={selection}
+      />
       <br />
       <p>Score: {score}</p>
       <div className="submit-button">
-        <button onClick={submitHandler}>Submit</button>
+        <button onClick={submitHandler} disabled={hasGuessed}>
+          Submit
+        </button>
       </div>
       <button onClick={nextButton}>Next</button>
 
       {hasGuessed && isGuessCorrect && <CongratsCard article={article} />}
-      {hasGuessed && !isGuessCorrect && <p>Incorrect, guess again!</p>}
+      {/* {hasGuessed && !isGuessCorrect && <p>Incorrect, guess again!</p>} */}
+      {hasGuessed && !isGuessCorrect && <IncorrectCard article={article} />}
     </div>
   );
 };
