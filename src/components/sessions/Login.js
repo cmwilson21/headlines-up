@@ -9,8 +9,8 @@ const Login = () => {
         <h1>Login</h1>
         <form>
           <label>
-            Email:
-            <input type="text" name="email" />
+            Username:
+            <input type="text" name="username" />
           </label>
           <br />
           <label>

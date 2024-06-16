@@ -6,9 +6,12 @@
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.1.1",
     "@testing-library/user-event": "^13.5.0",
+    "@vercel/kv": "^2.0.0",
+    "bcrypt": "^5.1.1",
     "body-parser": "^1.20.2",
     "express": "^4.19.2",
     "express-http-proxy": "^2.0.0",
+    "jsonwebtoken": "^9.0.2",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-dotenv": "^0.1.3",
@@ -19,6 +22,8 @@
     "redux": "^4.2.0",
     "redux-devtools-extension": "^2.13.9",
     "redux-thunk": "^2.4.1",
+    "sqlite": "^5.1.1",
+    "sqlite3": "^5.1.7",
     "thunk": "^0.0.1",
     "web-vitals": "^2.1.4"
   },
@@ -27,7 +32,8 @@
     "start": "react-scripts --openssl-legacy-provider start",
     "build": "react-scripts --openssl-legacy-provider build",
     "test": "react-scripts --openssl-legacy-provider test",
-    "eject": "react-scripts --openssl-legacy-provider eject"
+    "eject": "react-scripts --openssl-legacy-provider eject",
+    "dev": "nodemon server/index.js"
   },
   "eslintConfig": {
     "extends": [
@@ -48,6 +54,7 @@
     ]
   },
   "devDependencies": {
-    "jest": "^27.5.1"
+    "jest": "^27.5.1",
+    "nodemon": "^3.1.3"
   }
 }
