@@ -2,7 +2,7 @@ import React from "react";
 
 // The radio buttons component is responsible for rendering the radio buttons.
 
-const RadioButtons = ({ changeHandler, selection }) => {
+const RadioButtons = ({ changeHandler, selection, disabled }) => {
   // const [selection, setSelection] = useState("");
 
   // set radioOptions to an array of objects
@@ -18,7 +18,12 @@ const RadioButtons = ({ changeHandler, selection }) => {
   const RadioButton = ({ label, value, onChange }) => {
     return (
       <label>
-        <input type="radio" checked={value} onChange={onChange} />
+        <input
+          type="radio"
+          checked={value}
+          onChange={onChange}
+          disabled={disabled}
+        />
         {label}
       </label>
     );
