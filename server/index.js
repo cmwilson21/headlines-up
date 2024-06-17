@@ -1,13 +1,15 @@
 const sqlite3 = require("sqlite3").verbose();
 const express = require("express");
 const proxy = require("express-http-proxy");
+const path = require("path");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const bodyParser = require("body-parser");
 const app = express();
 const port = 3010;
-const userStore = new Map();
-userStore.set("bob", { password: "123", score: 0 });
+
+// Serve static files from the React frontend app
+app.use(express.static(path.join(__dirname, "..", "build")));
 
 // Open a database handle
 let db = new sqlite3.Database(
@@ -60,6 +62,11 @@ app.put("/signup", bodyParser.json(), (req, res, next) => {
       res.sendStatus(200);
     }
   );
+});
+
+// Anything that doesn't match the above, send back the index.html file - a fallback to cover any path outside of our routes
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "..", "/build/index.html"));
 });
 
 app.listen(port, () => {
