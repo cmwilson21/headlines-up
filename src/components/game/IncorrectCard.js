@@ -1,8 +1,9 @@
 import React from "react";
+import "./game-components.css";
 
 const IncorrectCard = ({ article }) => {
   return (
-    <div>
+    <div className="card-container">
       <p>
         Sorry, your guess was incorrect. This headline was written by{" "}
         {article.source.name}.
