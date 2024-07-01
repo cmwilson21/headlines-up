@@ -27,7 +27,7 @@ export const GamePageBody = () => {
 
   if (article) {
     return (
-      <div>
+      <div className="card-container">
         <div className="card">
           <GameCard
             article={article}

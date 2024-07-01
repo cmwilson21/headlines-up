@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import CongratsCard from "./CongratsCard.js";
 import RadioButtons from "./RadioButtons.js";
 import IncorrectCard from "./IncorrectCard.js";
+import "./game-components.css";
 
 // The game card presents the game.
 
@@ -69,7 +70,9 @@ const GameCard = ({ article, nextButton }) => {
           Submit
         </button>
       </div>
-      <button onClick={nextButton}>Next</button>
+      <button className="next-button" onClick={nextButton}>
+        Next
+      </button>
 
       {hasGuessed && isGuessCorrect && <CongratsCard article={article} />}
       {/* {hasGuessed && !isGuessCorrect && <p>Incorrect, guess again!</p>} */}
