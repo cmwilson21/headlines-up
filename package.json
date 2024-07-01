@@ -7,6 +7,7 @@
     "body-parser": "^1.20.2",
     "express": "^4.19.2",
     "express-http-proxy": "^2.0.0",
+    "husky": "^9.0.11",
     "jsonwebtoken": "^9.0.2",
     "sqlite3": "^5.1.7"
   },
@@ -16,7 +17,8 @@
     "build": "react-scripts --openssl-legacy-provider build",
     "test": "react-scripts --openssl-legacy-provider test",
     "eject": "react-scripts --openssl-legacy-provider eject",
-    "dev": "nodemon server/index.js"
+    "dev": "nodemon server/index.js",
+    "prepare": "husky"
   },
   "eslintConfig": {
     "extends": [
@@ -37,6 +39,9 @@
     ]
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^5.16.4",
+    "@testing-library/react": "^13.1.1",
+    "@testing-library/user-event": "^13.5.0",
     "jest": "^27.5.1",
     "nodemon": "^3.1.3",
     "react": "^18.0.0",
@@ -49,9 +54,6 @@
     "redux": "^4.2.0",
     "redux-devtools-extension": "^2.13.9",
     "redux-thunk": "^2.4.1",
-    "@testing-library/jest-dom": "^5.16.4",
-    "@testing-library/react": "^13.1.1",
-    "@testing-library/user-event": "^13.5.0",
     "thunk": "^0.0.1"
   }
 }
