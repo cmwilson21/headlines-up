@@ -16,8 +16,7 @@
     "build": "react-scripts --openssl-legacy-provider build",
     "test": "react-scripts --openssl-legacy-provider test",
     "eject": "react-scripts --openssl-legacy-provider eject",
-    "dev": "nodemon server/index.js",
-    "prepare": "husky"
+    "dev": "nodemon server/index.js"
   },
   "eslintConfig": {
     "extends": [
