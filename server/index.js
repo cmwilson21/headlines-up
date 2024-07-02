@@ -6,7 +6,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const bodyParser = require("body-parser");
 const app = express();
-const port = 3010;
+const port = +process.argv[2] || 3010;
 
 // Serve static files from the React frontend app
 app.use(express.static(path.join(__dirname, "..", "build")));
