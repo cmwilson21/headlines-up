@@ -28,3 +28,4 @@ notes.md
 env
 .env 
 users.db
+update-prod.sh
