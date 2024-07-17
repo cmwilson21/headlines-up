@@ -59,6 +59,7 @@ const GameCard = ({ article, nextButton }) => {
         )}
       </p>
       <RadioButtons
+        className="radio-buttons"
         changeHandler={changeHandler}
         disabled={hasGuessed}
         selection={selection}

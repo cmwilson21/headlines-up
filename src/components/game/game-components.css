@@ -4,13 +4,48 @@
   margin: 20px auto 0 auto;
   border: 1px solid #ccc;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-  padding: 0 20px 0 20px;
+  padding: 0 20px 20px 20px;
+}
+
+.card-title {
+  font-size: 1.5em; /* Adjust as needed */
+  margin: 20px 0 10px 0; /* Adjust as needed */
+}
+
+input[type="radio"] {
+  margin: 0 3px 0 10px; /* Adjust the value as needed */
 }
 
 /* .card-container p {
   padding: 
 } */
 
+button,
+.submit-button button {
+  padding: 2px 4px; /* Adjust as needed */
+  border: 1px solid #000; /* Adjust color as needed */
+  background-color: #fff; /* Adjust color as needed */
+  color: #000; /* Adjust color as needed */
+  cursor: pointer;
+  font-size: 0.8em; /* Adjust as needed */
+  border-radius: 5px; /* Adjust as needed */
+  transition: background-color 0.3s ease;
+}
+
+button:hover,
+.submit-button button:hover {
+  background-color: #ddd; /* Adjust color as needed */
+}
+
 .next-button {
-  margin-bottom: 8px;
+  margin-bottom: 10px;
+}
+
+.article-link {
+  color: #0000ee; /* Adjust color as needed */
+  text-decoration: underline;
+}
+
+.article-link:hover {
+  color: #551a8b; /* Adjust color as needed */
 }

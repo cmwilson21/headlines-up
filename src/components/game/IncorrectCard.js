@@ -20,7 +20,12 @@ const IncorrectCard = ({ article }) => {
         <p>{article.description}</p>
         <p>
           {article.content}...{" "}
-          <a href={article.url} target="_blank" rel="noreferrer">
+          <a
+            href={article.url}
+            className="article-link"
+            target="_blank"
+            rel="noreferrer"
+          >
             view full article.
           </a>
         </p>
