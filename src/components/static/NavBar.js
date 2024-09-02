@@ -1,7 +1,8 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 
-const NavBar = () => {
+const GuestNavBar = () => {
   return (
     <div className="navbar">
       <ul className="nav-ul">
@@ -23,6 +24,16 @@ const NavBar = () => {
       </ul>
     </div>
   );
+};
+
+const NavBar = () => {
+  const { loggedIn, username } = useSelector((state) => state.auth);
+  console.log(username);
+  if (!loggedIn) {
+    return <GuestNavBar />;
+  }
+
+  return <div>"test"</div>;
 };
 
 export default NavBar;
