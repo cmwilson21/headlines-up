@@ -25,26 +25,6 @@ export const signup = (details) => {
   };
 };
 
-// export const getCurrentUser = () => {
-//   return async (dispatch) => {
-//     dispatch({ type: "REQUESTING" });
-//     const jwt = localStorage.getItem("jwt");
-//     const response = await fetch("user/data", {
-//       headers: {
-//         Accept: "application/json",
-//         "Content-Type": "application/json",
-//         Authorization: `Bearer ${jwt}`,
-//       },
-//     });
-//     const data = await response.json();
-//     const payload = { user: data.user, jwt: jwt };
-//     if (data.user) {
-//       dispatch({ type: "LOGIN", payload });
-//     }
-//     dispatch({ type: "COMPLETED_REQUESTING" });
-//   };
-// };
-
 export const login = (details) => {
   return async (dispatch) => {
     dispatch({ type: "REQUESTING" });
@@ -62,12 +42,71 @@ export const login = (details) => {
     if (data.errors) {
       dispatch({ type: "ERRORS", payload: data.errors });
     } else {
-      // console.log('data', data)
       localStorage.setItem("jwt", data.jwt);
       localStorage.setItem("username", data.username);
       dispatch({ type: "LOGIN", payload: data });
       dispatch({ type: "CLEAR_ERRORS" });
       dispatch({ type: "COMPLETED_REQUESTING" });
+    }
+  };
+};
+
+export const logout = () => {
+  return (dispatch) => {
+    localStorage.removeItem("jwt");
+    localStorage.removeItem("username");
+    dispatch({ type: "LOGOUT" });
+  };
+};
+
+export const fetchScore = () => {
+  return async (dispatch) => {
+    try {
+      const jwt = localStorage.getItem("jwt");
+      const resp = await fetch("/user/score", {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${jwt}`,
+        },
+      });
+
+      if (resp.status === 401) {
+        dispatch({ type: "LOGOUT" });
+        return;
+      }
+
+      const data = await resp.json();
+      if (data.errors) {
+        dispatch({ type: "ERRORS", payload: data.errors });
+      } else {
+        dispatch({ type: "UPDATE_SCORE", payload: data });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+
+export const updateScore = (score) => {
+  return async (dispatch) => {
+    const jwt = localStorage.getItem("jwt");
+
+    const resp = await fetch("/user/score", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${jwt}`,
+      },
+      body: JSON.stringify({ score }),
+    });
+
+    const data = await resp.json();
+    if (data.errors) {
+      dispatch({ type: "ERRORS", payload: data.errors });
+    } else {
+      dispatch({ type: "UPDATE_SCORE", payload: data });
     }
   };
 };

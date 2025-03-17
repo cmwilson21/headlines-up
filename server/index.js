@@ -30,7 +30,8 @@ let db = new sqlite3.Database(
 db.run(`CREATE TABLE IF NOT EXISTS users (
   username TEXT PRIMARY KEY,
   password TEXT NOT NULL,
-  score INTEGER
+  score INTEGER,
+  validAfter INTEGER DEFAULT 0
 )`);
 
 app.use("/proxy", proxy("https://newsapi.org"));
@@ -94,15 +95,48 @@ app.put("/signup", bodyParser.json(), (req, res, next) => {
   );
 });
 
+app.post("/user/password", auth, bodyParser.json(), (req, res, next) => {
+  if (!req.username) {
+    return res.send(401);
+  }
+  bcrypt.hash(req.body.password, 11, function (err, hash) {
+    db.run(
+      "UPDATE users SET validAfter = ?, password = ? WHERE username = ?",
+      [Date.now(), hash, req.username],
+      function (err) {
+        if (err) {
+          next(err);
+          return console.log(err.message);
+        }
+        res.send(200);
+      }
+    );
+  });
+});
+
 function auth(req, res, next) {
   const token = req.headers.authorization.split(" ")[1];
   jwt.verify(token, secretKey, function (err, decoded) {
     if (err) {
       res.sendStatus(401);
     } else {
-      console.log("decoded", decoded);
-      req.username = decoded.username;
-      next();
+      db.get(
+        "SELECT * FROM users WHERE username = ?",
+        [decoded.username],
+        (err, row) => {
+          if (err || !row) {
+            return next(err);
+          } else {
+            console.log("decoded", decoded);
+            if (decoded.iat < row.validAfter) {
+              console.log("decoded after", row.validAfter);
+              return res.sendStatus(401);
+            }
+            req.username = decoded.username;
+            next();
+          }
+        }
+      );
     }
   });
 }
@@ -119,7 +153,25 @@ app.post("/user/score", auth, bodyParser.json(), (req, res, next) => {
         next(err);
         return console.log(err.message);
       }
-      res.send(200);
+      res.json({ score: req.body.score });
+    }
+  );
+});
+
+app.get("/user/score", auth, (req, res, next) => {
+  if (!req.username) {
+    return res.send(401);
+  }
+  db.get(
+    "SELECT score FROM users WHERE username = ?",
+    [req.username],
+    (err, row) => {
+      if (err) {
+        next(err);
+        return console.log(err.message);
+      }
+      console.log("row", row);
+      res.json({ score: row.score });
     }
   );
 });

@@ -3,20 +3,18 @@ import CongratsCard from "./CongratsCard.js";
 import RadioButtons from "./RadioButtons.js";
 import IncorrectCard from "./IncorrectCard.js";
 import "./game-components.css";
+import { useSelector, useDispatch } from "react-redux";
+import { updateScore } from "../../actions/sessionsAction.js";
 
 // The game card presents the game.
 
 const GameCard = ({ article, nextButton }) => {
+  const dispatch = useDispatch();
+  const score = useSelector((state) => state.auth.score);
+
   const [selection, setSelection] = useState("");
   const [isGuessCorrect, setIsGuessCorrect] = useState("");
-  const [score, setScore] = useState(
-    () => JSON.parse(localStorage.getItem("score")) || 0
-  );
   const [hasGuessed, setHasGuessed] = useState(false);
-
-  useEffect(() => {
-    localStorage.setItem("score", JSON.stringify(score));
-  }, [score]);
 
   const changeHandler = (source) => {
     console.log("source2", source);
@@ -37,7 +35,7 @@ const GameCard = ({ article, nextButton }) => {
     setIsGuessCorrect(isCorrect);
     if (isCorrect) {
       console.log("correct");
-      setScore(score + 1);
+      dispatch(updateScore(score + 1));
       console.log("Score", score);
     } else {
       console.log("incorrect");

@@ -19,7 +19,6 @@ function Login() {
       ...loginState,
       [e.target.name]: e.target.value,
     });
-    console.log("handleChange", loginState);
   };
 
   // handle submit button
