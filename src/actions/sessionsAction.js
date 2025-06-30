@@ -88,25 +88,26 @@ export const fetchScore = () => {
   };
 };
 
-export const updateScore = (score) => {
+export const guess = (articleHash, selection) => {
   return async (dispatch) => {
     const jwt = localStorage.getItem("jwt");
 
-    const resp = await fetch("/user/score", {
+    const resp = await fetch("/user/guess", {
       method: "POST",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
+
         Authorization: `Bearer ${jwt}`,
       },
-      body: JSON.stringify({ score }),
+      body: JSON.stringify({ articleHash, selection }),
     });
 
     const data = await resp.json();
     if (data.errors) {
       dispatch({ type: "ERRORS", payload: data.errors });
     } else {
-      dispatch({ type: "UPDATE_SCORE", payload: data });
+      dispatch({ type: "UPDATE_GUESS", payload: data });
     }
   };
 };

@@ -1,4 +1,5 @@
 require("dotenv").config();
+const crypto = require("crypto");
 
 const sqlite3 = require("sqlite3").verbose();
 const express = require("express");
@@ -10,6 +11,7 @@ const bodyParser = require("body-parser");
 const app = express();
 const port = +process.argv[2] || 3010;
 const secretKey = process.env.JWT_SECRET_KEY;
+const apiKey = process.env.REACT_APP_API_KEY;
 
 // Serve static files from the React frontend app
 app.use(express.static(path.join(__dirname, "..", "build")));
@@ -30,11 +32,107 @@ let db = new sqlite3.Database(
 db.run(`CREATE TABLE IF NOT EXISTS users (
   username TEXT PRIMARY KEY,
   password TEXT NOT NULL,
-  score INTEGER,
   validAfter INTEGER DEFAULT 0
 )`);
 
-app.use("/proxy", proxy("https://newsapi.org"));
+// create table of guessed articles that includes a user id and the article hash
+db.run(`CREATE TABLE IF NOT EXISTS guessedArticles (
+  userId TEXT NOT NULL,
+  articleHash TEXT NOT NULL,
+  correctGuess INTEGER NOT NULL DEFAULT 0,
+  PRIMARY KEY (userId, articleHash),
+  FOREIGN KEY (userId) REFERENCES users(username),
+  FOREIGN KEY (articleHash) REFERENCES articles(hash)
+)`);
+
+db.run(
+  `CREATE INDEX IF NOT EXISTS idx_guessedArticles_userId_correctGuess ON guessedArticles(userId, correctGuess);`
+);
+
+// TODO: create an index for guessed articles to display % of right answers
+
+db.run(`CREATE TABLE IF NOT EXISTS articles (
+  hash TEXT PRIMARY KEY,
+  title TEXT NOT NULL,
+  source TEXT NOT NULL,
+  description TEXT NOT NULL,
+  publishedAt TEXT NOT NULL, 
+  url TEXT NOT NULL,
+  urlToImage TEXT NOT NULL
+)`);
+
+db.run(
+  `CREATE INDEX IF NOT EXISTS idx_publishedAt ON articles (publishedAt DESC)`
+);
+
+updateArticles();
+setInterval(updateArticles, 1000 * 60 * 60 * 6); // Update articles every six hour
+
+function updateArticles() {
+  fetch(
+    `http://headlinesup.com/proxy/v2/top-headlines?sources=bbc-news,fox-news,reuters,associated-press,cnn&apikey=${apiKey}&page=0`
+  )
+    .then((response) => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        console.error("Failed to fetch news sources");
+        // may want to handle this differently later
+      }
+    })
+    .then((data) => {
+      if (data && data.articles) {
+        data.articles.forEach((article) => {
+          const hash = crypto.createHash("sha256");
+          hash.update(
+            article.description + article.title + article.publishedAt
+          );
+          const articleHash = hash.digest("hex");
+          db.run(
+            `INSERT OR IGNORE INTO articles (hash, title, source, description, publishedAt, url, urlToImage) VALUES (?, ?, ?, ?, ?, ?, ?)`,
+            [
+              articleHash,
+              article.title,
+              article.source.id,
+              article.source.description || "",
+              article.publishedAt || new Date().toISOString(),
+              article.url,
+              article.urlToImage || "",
+            ],
+            (err) => {
+              if (err) {
+                console.error("Error inserting article:", err.message);
+              }
+            }
+          );
+        });
+      }
+    });
+}
+
+// Debugging
+db.all("SELECT * FROM articles", (err, rows) => {
+  console.log("rows", rows);
+  console.log(rows.length, "articles in the database");
+});
+
+// app.use("/proxy", proxy("https://newsapi.org"));
+
+app.get("/articles", auth, (req, res, next) => {
+  const page = parseInt(req.query.page) || 0; // Default to page 0
+  const pageSize = parseInt(req.query.pageSize) || 10; // Default to 10 results per page
+  const offset = page * pageSize;
+
+  // const query = `SELECT * FROM articles ORDER BY publishedAt DESC LIMIT ? OFFSET ?`;
+  const query = `SELECT hash, title, description, publishedAt, url, urlToImage FROM articles WHERE hash NOT IN (SELECT articleHash FROM guessedArticles WHERE userId = ?) ORDER BY publishedAt DESC LIMIT ? OFFSET ?`;
+  db.all(query, [req.username, pageSize, offset], (err, rows) => {
+    if (err) {
+      return next(err);
+    } else {
+      res.json({ articles: rows });
+    }
+  });
+});
 
 app.post("/login", bodyParser.json(), (req, res, next) => {
   db.get(
@@ -50,7 +148,7 @@ app.post("/login", bodyParser.json(), (req, res, next) => {
         }
         if (result === true) {
           const token = jwt.sign({ username: row.username }, secretKey);
-          res.json({ jwt: token, score: row.score, username: row.username });
+          res.json({ jwt: token, username: row.username });
         } else {
           res.send(401);
         }
@@ -75,8 +173,8 @@ app.put("/signup", bodyParser.json(), (req, res, next) => {
         bcrypt.hash(req.body.password, 11, function (err, hash) {
           console.log({ hash });
           db.run(
-            "INSERT INTO users(username, password, score) VALUES(?, ?, ?)",
-            [req.body.username, hash, 0],
+            "INSERT INTO users(username, password) VALUES(?, ?)",
+            [req.body.username, hash],
             function (err) {
               if (err) {
                 next(err);
@@ -86,7 +184,7 @@ app.put("/signup", bodyParser.json(), (req, res, next) => {
                 { username: req.body.username },
                 secretKey
               );
-              res.json({ jwt: token, score: 0, username: req.body.username });
+              res.json({ jwt: token, username: req.body.username });
             }
           );
         });
@@ -141,21 +239,34 @@ function auth(req, res, next) {
   });
 }
 
-app.post("/user/score", auth, bodyParser.json(), (req, res, next) => {
+app.post("/user/guess", auth, bodyParser.json(), (req, res, next) => {
   if (!req.username) {
     return res.send(401);
   }
-  db.run(
-    "UPDATE users SET score = ? WHERE username = ?",
-    [req.body.score, req.username],
-    function (err) {
-      if (err) {
-        next(err);
-        return console.log(err.message);
-      }
-      res.json({ score: req.body.score });
+  const articleHash = req.body.articleHash;
+
+  db.get("SELECT * FROM articles WHERE hash = ?", [articleHash], (err, row) => {
+    if (err) {
+      next(err);
+      return console.log(err.message);
     }
-  );
+    if (!row) {
+      return res.status(404).send("Article not found");
+    }
+    const isCorrect = row.source === req.body.selection;
+    console.log("isCorrect", isCorrect);
+    db.run(
+      "INSERT OR REPLACE INTO guessedArticles (userId, articleHash, correctGuess) VALUES (?, ?, ?)",
+      [req.username, articleHash, isCorrect],
+      function (err) {
+        if (err) {
+          next(err);
+          return console.log(err.message);
+        }
+        res.json({ ok: true, correctGuess: isCorrect, source: row.source });
+      }
+    );
+  });
 });
 
 app.get("/user/score", auth, (req, res, next) => {
@@ -163,7 +274,7 @@ app.get("/user/score", auth, (req, res, next) => {
     return res.send(401);
   }
   db.get(
-    "SELECT score FROM users WHERE username = ?",
+    "SELECT SUM(correctGuess) AS score FROM guessedArticles WHERE correctGuess = 1 AND userId = ?",
     [req.username],
     (err, row) => {
       if (err) {

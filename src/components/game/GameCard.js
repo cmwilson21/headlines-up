@@ -4,18 +4,18 @@ import RadioButtons from "./RadioButtons.js";
 import IncorrectCard from "./IncorrectCard.js";
 import "./game-components.css";
 import { useSelector, useDispatch } from "react-redux";
-import { updateScore } from "../../actions/sessionsAction.js";
+import { guess } from "../../actions/sessionsAction.js";
 
 // The game card presents the game.
 
 const GameCard = ({ article, nextButton }) => {
   const dispatch = useDispatch();
-  const score = useSelector((state) => state.auth.score);
+  const { score, isGuessCorrect, lastSource } = useSelector(
+    (state) => state.auth
+  );
 
   const [selection, setSelection] = useState("");
-  const [isGuessCorrect, setIsGuessCorrect] = useState("");
   const [hasGuessed, setHasGuessed] = useState(false);
-
   const changeHandler = (source) => {
     console.log("source2", source);
     return () => {
@@ -23,23 +23,14 @@ const GameCard = ({ article, nextButton }) => {
     };
   };
 
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
     console.log("submitting", selection);
-    console.log("source id", article.source.id);
     if (hasGuessed) {
       return;
     }
-    const isCorrect = selection === article.source.id;
+    await dispatch(guess(article.hash, selection));
     setHasGuessed(true);
-    setIsGuessCorrect(isCorrect);
-    if (isCorrect) {
-      console.log("correct");
-      dispatch(updateScore(score + 1));
-      console.log("Score", score);
-    } else {
-      console.log("incorrect");
-    }
   };
 
   return (
@@ -56,6 +47,8 @@ const GameCard = ({ article, nextButton }) => {
           "(news source)"
         )}
       </p>
+
+      {/* TODO: Fix disabled buttons or make them only appear when needed */}
       <RadioButtons
         className="radio-buttons"
         changeHandler={changeHandler}
@@ -69,13 +62,20 @@ const GameCard = ({ article, nextButton }) => {
           Submit
         </button>
       </div>
-      <button className="next-button" onClick={nextButton}>
+      <button
+        className="next-button"
+        onClick={nextButton}
+        disabled={!hasGuessed}
+      >
         Next
       </button>
 
-      {hasGuessed && isGuessCorrect && <CongratsCard article={article} />}
-      {/* {hasGuessed && !isGuessCorrect && <p>Incorrect, guess again!</p>} */}
-      {hasGuessed && !isGuessCorrect && <IncorrectCard article={article} />}
+      {hasGuessed && isGuessCorrect && (
+        <CongratsCard article={article} source={lastSource} />
+      )}
+      {hasGuessed && !isGuessCorrect && (
+        <IncorrectCard article={article} source={lastSource} />
+      )}
     </div>
   );
 };

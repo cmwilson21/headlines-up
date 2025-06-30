@@ -19,7 +19,6 @@ const sessionsReducer = (state, action) => {
     case "LOGIN":
       return {
         username: action.payload.username,
-        score: action.payload.score,
         loggedIn: true,
         token: action.payload.jwt,
       };
@@ -27,6 +26,13 @@ const sessionsReducer = (state, action) => {
       return {
         ...state,
         score: action.payload.score,
+      };
+    case "UPDATE_GUESS":
+      return {
+        ...state,
+        score: state.score + (action.payload.correctGuess ? 1 : 0),
+        lastSource: action.payload.source,
+        isGuessCorrect: action.payload.correctGuess,
       };
     case "LOGOUT":
       return blankState;

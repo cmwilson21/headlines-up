@@ -17,10 +17,7 @@ function App() {
     window.addEventListener("focus", () => {
       dispatch(fetchScore());
     });
-
-    document.addEventListener("DOMContentLoaded", () => {
-      dispatch(fetchScore());
-    });
+    dispatch(fetchScore());
   });
 
   return (

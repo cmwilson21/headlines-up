@@ -46,8 +46,8 @@ const UserNavBar = ({ username, score }) => {
         <li className="nav-li">
           <NavLink to="/about">About</NavLink>
         </li>
-        <li>Hi {username}! </li>
-        <li>Score: {score}</li>
+        <li className="nav-li">Hi {username}!&nbsp;</li>
+        <li className="nav-li">Score: {score}</li>
         <li className="nav-li" onClick={handleSubmit}>
           <NavLink to="/">Logout</NavLink>
         </li>

@@ -1,12 +1,13 @@
 import React from "react";
 import "./game-components.css";
 
-const IncorrectCard = ({ article }) => {
+const IncorrectCard = ({ article, source }) => {
+  // TODO: fix the incorrect card to display the proper name of the source.
+
   return (
     <div className="card-container">
       <p>
-        Sorry, your guess was incorrect. This headline was written by{" "}
-        {article.source.name}.
+        Sorry, your guess was incorrect. This headline was written by {source}.
       </p>
       <div className="incorrect-card-article">
         <img
