@@ -8,7 +8,8 @@
     "express": "^4.19.2",
     "express-http-proxy": "^2.0.0",
     "jsonwebtoken": "^9.0.2",
-    "sqlite3": "^5.1.7"
+    "sqlite3": "^5.1.7",
+    "dotenv": "^16.0.3"
   },
   "scripts": {
     "server": "node server/index.js",
