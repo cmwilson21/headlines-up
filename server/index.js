@@ -16,9 +16,23 @@ const apiKey = process.env.REACT_APP_API_KEY;
 // Serve static files from the React frontend app
 app.use(express.static(path.join(__dirname, "..", "build")));
 
+// Get the directory of the current file (index.js)
+const currentDir = __dirname;
+
+// Get the parent directory (one level above index.js)
+const parentDir = path.resolve(currentDir, "..");
+
+console.log("Current Directory:", currentDir);
+console.log("Parent Directory:", parentDir);
+
+console.log(process.env);
+
+console.log(apiKey);
+
 // Open a database handle
 let db = new sqlite3.Database(
-  "./users.db",
+  // "./users.db",
+  path.join(parentDir, "users.db"), // Use the parent directory for the database
   sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE,
   (err) => {
     if (err) {
@@ -65,54 +79,60 @@ db.run(
   `CREATE INDEX IF NOT EXISTS idx_publishedAt ON articles (publishedAt DESC)`
 );
 
+// TODO: handle error and catch fails - API key is not getting read as the right API key and this is not fetching correctly
 updateArticles();
 setInterval(updateArticles, 1000 * 60 * 60 * 6); // Update articles every six hour
 
-function updateArticles() {
-  fetch(
-    `http://headlinesup.com/proxy/v2/top-headlines?sources=bbc-news,fox-news,reuters,associated-press,cnn&apikey=${apiKey}&page=0`
-  )
-    .then((response) => {
-      if (response.ok) {
-        return response.json();
-      } else {
-        console.error("Failed to fetch news sources");
-        // may want to handle this differently later
-      }
-    })
-    .then((data) => {
-      if (data && data.articles) {
-        data.articles.forEach((article) => {
-          const hash = crypto.createHash("sha256");
-          hash.update(
-            article.description + article.title + article.publishedAt
-          );
-          const articleHash = hash.digest("hex");
-          db.run(
-            `INSERT OR IGNORE INTO articles (hash, title, source, description, publishedAt, url, urlToImage) VALUES (?, ?, ?, ?, ?, ?, ?)`,
-            [
-              articleHash,
-              article.title,
-              article.source.id,
-              article.source.description || "",
-              article.publishedAt || new Date().toISOString(),
-              article.url,
-              article.urlToImage || "",
-            ],
-            (err) => {
-              if (err) {
-                console.error("Error inserting article:", err.message);
+async function updateArticles() {
+  try {
+    await fetch(
+      // `http://headlinesup.com/proxy/v2/top-headlines?sources=bbc-news,fox-news,reuters,associated-press,cnn&apikey=${apiKey}&page=0`
+      `https://newsapi.org/v2/top-headlines?sources=bbc-news,fox-news,reuters,associated-press,cnn&apikey=${apiKey}&page=0`
+    )
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          console.error("Failed to fetch news sources");
+          // may want to handle this differently later
+        }
+      })
+      .then((data) => {
+        if (data && data.articles) {
+          data.articles.forEach((article) => {
+            const hash = crypto.createHash("sha256");
+            hash.update(
+              article.description + article.title + article.publishedAt
+            );
+            const articleHash = hash.digest("hex");
+            db.run(
+              `INSERT OR IGNORE INTO articles (hash, title, source, description, publishedAt, url, urlToImage) VALUES (?, ?, ?, ?, ?, ?, ?)`,
+              [
+                articleHash,
+                article.title,
+                article.source.id,
+                article.source.description || "",
+                article.publishedAt || new Date().toISOString(),
+                article.url,
+                article.urlToImage || "",
+              ],
+              (err) => {
+                if (err) {
+                  console.error("Error inserting article:", err.message);
+                }
               }
-            }
-          );
-        });
-      }
-    });
+            );
+          });
+        }
+      });
+  } catch (error) {
+    console.error("Error updating articles:", error);
+  }
 }
 
 // Debugging
 db.all("SELECT * FROM articles", (err, rows) => {
-  console.log("rows", rows);
+  // console.log("rows", rows);
   console.log(rows.length, "articles in the database");
 });
 
