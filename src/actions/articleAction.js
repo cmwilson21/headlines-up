@@ -1,6 +1,6 @@
 import { apiUrl } from "../Globals";
 let requestNum = 0;
-// export const loadArticle = (token, currentUser) => {
+
 export const loadArticle = () => {
   return async (dispatch) => {
     dispatch({ type: "REQUESTING" });
@@ -13,5 +13,11 @@ export const loadArticle = () => {
     const data = await resp.json();
     dispatch({ type: "GET_ARTICLES", payload: data.articles });
     dispatch({ type: "COMPLETED_REQUESTING" });
+  };
+};
+
+export const setArticleNumber = (number) => {
+  return async (dispatch) => {
+    dispatch({ type: "SET_ARTICLE_NUMBER", payload: number });
   };
 };

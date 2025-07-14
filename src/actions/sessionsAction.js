@@ -56,6 +56,7 @@ export const logout = () => {
     localStorage.removeItem("jwt");
     localStorage.removeItem("username");
     dispatch({ type: "LOGOUT" });
+    window.location.href = "/login";
   };
 };
 

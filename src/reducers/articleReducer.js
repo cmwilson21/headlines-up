@@ -1,4 +1,4 @@
-const initialState = [];
+const initialState = { number: 0, list: [] };
 
 const articleReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -14,10 +14,13 @@ const articleReducer = (state = initialState, action) => {
         withRandom.sort((a, b) => {
           return b.weight - a.weight;
         });
-        return state.concat(withRandom.map((item) => item.article));
+        const list = state.list.concat(withRandom.map((item) => item.article));
+        return { ...state, list };
       } else {
         return state;
       }
+    case "SET_ARTICLE_NUMBER":
+      return { ...state, number: action.payload };
     default:
       return state;
   }

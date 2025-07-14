@@ -79,14 +79,12 @@ db.run(
   `CREATE INDEX IF NOT EXISTS idx_publishedAt ON articles (publishedAt DESC)`
 );
 
-// TODO: handle error and catch fails - API key is not getting read as the right API key and this is not fetching correctly
 updateArticles();
 setInterval(updateArticles, 1000 * 60 * 60 * 6); // Update articles every six hour
 
 async function updateArticles() {
   try {
     await fetch(
-      // `http://headlinesup.com/proxy/v2/top-headlines?sources=bbc-news,fox-news,reuters,associated-press,cnn&apikey=${apiKey}&page=0`
       `https://newsapi.org/v2/top-headlines?sources=bbc-news,fox-news,reuters,associated-press,cnn&apikey=${apiKey}&page=0`
     )
       .then((response) => {
